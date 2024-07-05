@@ -13,7 +13,7 @@ import java.util.Arrays;
  * @author dkw
  * AuthenticationProvider实现了身份验证逻辑并且委托给UserDetailsService和PasswordEncoder以便进行用户和密码管理
  */
-@Component
+//@Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     // 进行用户身份验证逻辑，在这里加上用户校验逻辑后，就无需再对userDetailsService进行重写，直接对输入的用户和密码验证即可

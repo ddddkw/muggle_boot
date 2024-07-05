@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web.mapper.UserMapper">
+    <resultMap id="queryUserMap" type="web.entity.User" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="authorities" ofType="web.entity.Authority" autoMapping="true" columnPrefix="a_">
+            <id column="id" property="id"/>
+            <result column="authorityName" property="authorityName"/>
+        </collection>
+    </resultMap>
+    <select id="queryUserByUsername" resultMap="queryUserMap">
+        SELECT u.*,
+               a.id AS a_id,
+               a.authorityName AS a_authorityName
+        FROM users u
+                 LEFT JOIN user_authority ua
+                           ON u.id = ua.userId
+                 LEFT JOIN authorities a
+                           ON a.id = ua.authorityId
+        WHERE u.username = #{username}
+          AND u.enabled != 0
+    </select>
+</mapper>

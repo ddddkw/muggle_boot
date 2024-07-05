@@ -1,2 +1,5 @@
 /spring_security_parent.iml
 /spring_security_simple_web01/spring_security_simple_web01.iml
+/spring_security_simple_web01/src/main/resources/application_dkw.yml
+/spring_security_simple_web01/src/main/resources/application-dkw.yml
+/spring_security_simple_web01/target/
