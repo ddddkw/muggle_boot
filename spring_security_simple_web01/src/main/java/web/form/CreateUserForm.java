@@ -2,6 +2,7 @@ package web.form;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import web.entity.Authority;
 
 import java.util.List;
 
@@ -22,5 +23,5 @@ public class CreateUserForm {
 
     private Boolean enabled;
 
-    private List authorities;
+    private List<Authority> authorities;
 }

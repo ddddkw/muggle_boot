@@ -20,6 +20,7 @@ public class Authority implements GrantedAuthority {
 
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
+
     private String authorityName;
 
     @Override
@@ -28,4 +29,5 @@ public class Authority implements GrantedAuthority {
 
         return authorityName;
     }
+
 }

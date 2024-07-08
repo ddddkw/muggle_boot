@@ -1,5 +1,6 @@
 package web.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,25 +50,25 @@ public class MybatisUserDetailsService extends ServiceImpl<UserMapper, User> imp
             String passwordEncoded = passwordEncoder.encode(passwordNotEncode);
             user.setPassword(passwordEncoded);
             userMapper.insert(user);
-            // authorities是用户的权限信息
-            Set<Authority> authorities = user.getAuthorities();
-            // 将用户的权限id收集起来
-            Set<Long> authorityIds = authorities.stream().map(Authority::getId).collect(Collectors.toSet());
-            authorityIds.forEach(id -> {
-                // 根据id获取对应的权限详细信息
-                Authority authority = authorityMapper.selectById(id);
-                // 如果用户权限信息不为空，将权限和用户信息存到用户-权限关联表中
-                if(authority != null){
-                    Long userId = user.getId();
-                    UserAuthority userAuthority = new UserAuthority();
-                    userAuthority.setUserId(userId);
-                    userAuthority.setAuthorityId(id);
-                    userAuthorityMapper.insert(userAuthority);
+
+            Set<Authority> authorities = (Set<Authority>) user.getAuthorities();
+
+            authorities.forEach(authority -> {
+                if (authority != null) { // 防止 NPE
+                    Authority detailedAuthority = authorityMapper.selectById(authority.getId());
+                    if (detailedAuthority != null) {
+                        Long userId = user.getId();
+                        UserAuthority userAuthority = new UserAuthority();
+                        userAuthority.setUserId(userId);
+                        userAuthority.setAuthorityId(authority.getId());
+                        userAuthorityMapper.insert(userAuthority);
+                    }
                 }
             });
+
             return true;
         } catch (Exception e) {
-            log.error(e.getMessage(),e);
+            log.error("Error saving user: ", e);
             return false;
         }
     }
