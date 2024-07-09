@@ -38,6 +38,9 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private CustomEntryPoint customEntryPoint;
+
     // 重写端点授权配置，配置过滤链
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -50,7 +53,14 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .csrf().disable() // 使用antMatchers时需要将csrf禁用掉，否则需要填加ignoringAntMatchers进行配置
-                ; // 启用HTTP Basic认证
+                ;
+        // 启用HTTP Basic认证，可在其中自定义加上一些校验规则，比如校验失败后的规则
+        http.httpBasic();
+        http.exceptionHandling() // 配置异常处理的部分，它定义了当认证失败或未认证的请求尝试访问受保护资源时应采取的操作
+                .authenticationEntryPoint(customEntryPoint) // 指定一个自定义的 AuthenticationEntryPoint，这是当用户尝试访问一个需要认证的资源但尚未认证时，Spring Security 应调用的类
+                .and()
+                .authorizeRequests()
+                .anyRequest().authenticated();
 //        http.csrf().ignoringAntMatchers("/your/path/**", "/another/path/**");
     }
 

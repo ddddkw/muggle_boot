@@ -1,6 +1,5 @@
 package web.form;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import web.entity.Authority;
 
