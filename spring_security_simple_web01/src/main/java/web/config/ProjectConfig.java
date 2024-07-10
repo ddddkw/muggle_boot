@@ -59,6 +59,12 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling() // 配置异常处理的部分，它定义了当认证失败或未认证的请求尝试访问受保护资源时应采取的操作
                 .authenticationEntryPoint(customEntryPoint) // 指定一个自定义的 AuthenticationEntryPoint，这是当用户尝试访问一个需要认证的资源但尚未认证时，Spring Security 应调用的类
                 .and()
+                // 对基于表单登录的形式，也有两种情况，认证失败和认证成功的处理handler
+                .formLogin() // 表单登录，启动程序后，调用响应接口时，会跳转到一个登录页面，没注册UserDetailsService，就可以使用所提供的默认凭据进行登录
+                // successHandler和failureHandler是自己定义的处理函数
+//                .successHandler(successHandler)
+//                .failureHandler(failureHandler)
+                .and()
                 .authorizeRequests()
                 .anyRequest().authenticated();
 //        http.csrf().ignoringAntMatchers("/your/path/**", "/another/path/**");

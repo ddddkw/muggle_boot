@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web02.mapper.AuthorityMapper">
+    <resultMap type="web02.entity.Authority" id="SysMenuMap">
+        <result property="id" column="id" />
+        <result property="authorityName" column="authorityName" />
+    </resultMap>
+    <select id="loadPermissionByRoleCode" resultMap="SysMenuMap">
+        select
+        a.id,a.authorityName
+        from authorities a
+        left join role_authority ra on a.id = ra.authorityId
+        left join roles r on r.id = ra.roleId
+        where r.roleName in
+        <foreach collection="roleInfos" item="roleInfo" open="(" separator="," close=")">
+            #{roleInfo}
+        </foreach>
+    </select>
+</mapper>

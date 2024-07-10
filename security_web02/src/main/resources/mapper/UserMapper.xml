@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="web02.mapper.UserMapper">
+    <resultMap id="queryUserMap" type="web02.entity.User" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="roles" ofType="web02.entity.Role" autoMapping="true" columnPrefix="r_">
+            <id column="id" property="id"/>
+            <result column="roleName" property="roleName"/>
+        </collection>
+    </resultMap>
+    <!--  用户表中所有的信息以及角色表中的角色id和角色名称  -->
+    <select id="queryUserByUsername" resultMap="queryUserMap">
+        SELECT u.*,
+               r.id AS r_id,
+               r.roleName AS r_roleName
+        from users u
+                 LEFT JOIN user_role ur
+                           ON u.id = ur.userId
+                 LEFT JOIN roles r
+                           ON r.id = ur.roleId
+        WHERE u.username = #{username}
+          AND u.enabled != 0
+    </select>
+    <select id="checkUsernameUnique" resultType="web02.entity.User">
+        select u.id,u.username from users u where u.username = #{username} limit 1
+    </select>
+    <select id="checkPhoneUnique" resultType="web02.entity.User">
+        select u.id,u.username from users u where u.mobile = #{mobile} limit 1
+    </select>
+</mapper>

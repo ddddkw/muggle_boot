@@ -3,3 +3,6 @@
 /spring_security_simple_web01/src/main/resources/application_dkw.yml
 /spring_security_simple_web01/src/main/resources/application-dkw.yml
 /spring_security_simple_web01/target/
+/security_web02/src/main/resources/application-dkw.yml
+/.idea/
+/security_web02/target/
